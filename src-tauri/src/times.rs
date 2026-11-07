@@ -64,6 +64,16 @@ pub fn place_date(cfg: &Config, now: DateTime<Utc>) -> NaiveDate {
     (now + Duration::seconds((cfg.lon * 240.0) as i64)).date_naive()
 }
 
+/// The date and five prayers that `slot` belongs to (a late Isha can fall after midnight).
+pub fn day_of(cfg: &Config, slot: Slot) -> (NaiveDate, [Slot; 5]) {
+    let d = place_date(cfg, slot.at);
+    [d, d - Duration::days(1), d + Duration::days(1)]
+        .into_iter()
+        .map(|d| (d, day(cfg, d)))
+        .find(|(_, s)| s.contains(&slot))
+        .expect("a slot comes from one of the days around its own date")
+}
+
 /// Prayers of the place's yesterday, today and tomorrow: always brackets `now`.
 fn around(cfg: &Config, now: DateTime<Utc>) -> impl Iterator<Item = Slot> {
     let d = place_date(cfg, now);

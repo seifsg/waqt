@@ -67,8 +67,8 @@ pub fn show(app: &AppHandle, cfg: Option<&Config>, now: DateTime<Utc>) -> tauri:
     let head = format!("{} in {} · {}", next.label(), left(mins), clock(next.at));
     t.icon.set_tooltip(Some(format!("{head}\n{}", cfg.place).chars().take(120).collect::<String>()))?;
     t.header.set_text(&head)?;
-    let date = times::place_date(cfg, next.at);
-    for (item, slot) in t.lines.iter().zip(times::day(cfg, date)) {
+    let (date, day) = times::day_of(cfg, next);
+    for (item, slot) in t.lines.iter().zip(day) {
         item.set_text(format!("{}\t{}", slot.label(), clock(slot.at)))?;
         item.set_checked(slot == next)?;
     }

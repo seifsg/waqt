@@ -52,7 +52,7 @@ fn main() {
     tauri::Builder::default()
         .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_autostart::init(tauri_plugin_autostart::MacosLauncher::LaunchAgent, None))
-        .invoke_handler(tauri::generate_handler![settings::get_config, settings::save_config])
+        .invoke_handler(tauri::generate_handler![settings::get_config, settings::preview, settings::save_config])
         .setup(|app| {
             app.manage(tray::build(app.handle(), on_menu)?);
             let cfg = load_config(app.handle());

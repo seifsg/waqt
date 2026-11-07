@@ -21,14 +21,22 @@ pub struct Config {
     pub autostart: bool,
 }
 
+fn check(ok: bool, msg: &str) -> Result<(), String> {
+    if ok { Ok(()) } else { Err(msg.to_owned()) }
+}
+
 impl Config {
-    /// Rejects values the math or the UI cannot handle; the message is shown to the user as is.
-    pub fn validate(&self) -> Result<(), String> {
-        let check = |ok: bool, msg: &str| if ok { Ok(()) } else { Err(msg.to_owned()) };
+    /// Rejects values the math cannot handle; the message is shown to the user as is.
+    pub fn validate_math(&self) -> Result<(), String> {
         check(self.lat.is_finite() && self.lat.abs() <= 90.0, "Latitude must be a number from -90 to 90.")?;
         check(self.lon.is_finite() && self.lon.abs() <= 180.0, "Longitude must be a number from -180 to 180.")?;
         check((-2..=2).contains(&self.hijri_offset), "Hijri adjustment must be from -2 to +2 days.")?;
-        check(self.volume <= 100, "Volume must be from 0 to 100.")?;
+        check(self.volume <= 100, "Volume must be from 0 to 100.")
+    }
+
+    /// Everything a saved config must satisfy.
+    pub fn validate(&self) -> Result<(), String> {
+        self.validate_math()?;
         check((1..=120).contains(&self.place.trim().chars().count()), "Name the place (up to 120 characters).")
     }
 }

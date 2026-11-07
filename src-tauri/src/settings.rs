@@ -3,7 +3,9 @@
 use tauri::{AppHandle, Manager, State, WebviewUrl, WebviewWindowBuilder};
 use tauri_plugin_autostart::ManagerExt;
 
-use crate::{Shared, clock, config::{self, Config}, tray};
+use serde::Serialize;
+
+use crate::{Shared, clock, config::{self, Config}, hijri, times, tray};
 
 const LABEL: &str = "settings";
 
@@ -26,6 +28,36 @@ pub fn open(app: &AppHandle) -> tauri::Result<()> {
 #[tauri::command]
 pub fn get_config(state: State<'_, Shared>) -> Option<Config> {
     state.config()
+}
+
+/// One prayer line in the preview.
+#[derive(Serialize)]
+pub struct Line {
+    label: &'static str,
+    time: String,
+}
+
+/// What the form would give: the next prayer's day, which line is next, its Hijri date.
+#[derive(Serialize)]
+pub struct Preview {
+    times: Vec<Line>,
+    next: usize,
+    hijri: String,
+    polar: bool,
+}
+
+/// Times for a config being edited, so method and Asr choices show their effect at once.
+#[tauri::command]
+pub fn preview(cfg: Config) -> Result<Preview, String> {
+    cfg.validate_math()?;
+    let next = times::next(&cfg, clock::now());
+    let (date, day) = times::day_of(&cfg, next);
+    Ok(Preview {
+        times: day.iter().map(|s| Line { label: s.label(), time: tray::clock(s.at) }).collect(),
+        next: day.iter().position(|s| *s == next).expect("day_of returns the day holding next"),
+        hijri: hijri::label(date, cfg.hijri_offset),
+        polar: cfg.lat.abs() > times::MAX_LAT,
+    })
 }
 
 /// Validates, saves and applies a config, then closes the window.
