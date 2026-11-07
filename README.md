@@ -48,9 +48,9 @@ Settings: 12 calculation methods, Standard or Hanafi Asr, a Hijri date adjustmen
 ## Privacy and footprint
 
 - No account, no analytics, no network from Waqt: prayer times are computed on your PC and Waqt opens no sockets.
-- The settings window is drawn by Microsoft's WebView2 (part of Windows) with its web networking switched off, and exists only while it is open. While it is open, the WebView2 runtime itself may still connect to Microsoft (measured: 2 TCP connections; their purpose is not documented).
+- The settings window is drawn by Microsoft's WebView2 (part of Windows) with its web networking switched off, and exists only while it is open. While it is open, the WebView2 runtime itself may still connect to Microsoft: in our test, one TLS connection to an Office 365 server (certificate for outlook.com and *.office.com) about 35 seconds after the window opened. Microsoft does not document why, and the connection bypasses WebView2's proxy setting, so Waqt cannot block it.
 - About 13 MB of memory and no measurable CPU while it waits (about 30 MB after you have opened Settings, until Waqt restarts); it wakes at each minute and each prayer.
-- Your settings live in `%APPDATA%\dev.seif.waqt\config.json`.
+- Your settings live in `%APPDATA%\dev.seif.waqt\config.json`; errors are logged on your PC only, in `%LOCALAPPDATA%\dev.seif.waqt\logs\waqt.log` (under 1 MB).
 
 ## Platforms
 
@@ -62,6 +62,6 @@ Pushing a tag such as `v0.1.0` (matching the version in `src-tauri/tauri.conf.js
 
 ## Credits
 
-Prayer-time math by [salah](https://github.com/insha/salah), a Rust port of Batoul Apps' [Adhan](https://github.com/batoulapps/adhan-js), vendored with two fixes ([PATCHES.md](src-tauri/vendor/salah/PATCHES.md)). Place data © [GeoNames](https://www.geonames.org/) (CC BY 4.0). Adhan recording: CC0, Wikimedia Commons. Full list in [CREDITS.md](CREDITS.md).
+Prayer-time math by [salah](https://github.com/insha/salah), a Rust port of Batoul Apps' [Adhan](https://github.com/batoulapps/adhan-js), vendored with two fixes ([PATCHES.md](src-tauri/vendor/salah/PATCHES.md)). Place data © [GeoNames](https://www.geonames.org/) (CC BY 4.0). Adhan recording: CC0, Wikimedia Commons. Full list in [CREDITS.md](CREDITS.md). The installer puts `CREDITS.md` and `THIRD-PARTY-NOTICES.txt`, the license texts of all bundled code, next to Waqt.
 
 🏭 Built with [AI Software Factory](https://softwarefactory.company/) by Seif
