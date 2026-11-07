@@ -25,6 +25,7 @@ pub struct Tray {
     header: MenuItem<tauri::Wry>,
     lines: [CheckMenuItem<tauri::Wry>; 5],
     hijri: MenuItem<tauri::Wry>,
+    stop: MenuItem<tauri::Wry>,
 }
 
 /// Creates the tray with its menu; menu clicks go to `on_menu`.
@@ -36,11 +37,12 @@ pub fn build(app: &AppHandle, on_menu: fn(&AppHandle, &str)) -> tauri::Result<Tr
     let [a, b, c, d, e] = lines;
     let lines = [a?, b?, c?, d?, e?];
     let sep = || PredefinedMenuItem::separator(app);
+    let stop = MenuItem::with_id(app, "stop", "Stop adhan", false, None::<&str>)?;
     let settings = MenuItem::with_id(app, "settings", "Settings…", true, None::<&str>)?;
     let quit = MenuItem::with_id(app, "quit", "Quit Waqt", true, None::<&str>)?;
     let menu = Menu::with_items(
         app,
-        &[&header, &sep()?, &lines[0], &lines[1], &lines[2], &lines[3], &lines[4], &hijri, &sep()?, &settings, &quit],
+        &[&header, &sep()?, &lines[0], &lines[1], &lines[2], &lines[3], &lines[4], &hijri, &sep()?, &stop, &settings, &quit],
     )?;
     let icon = TrayIconBuilder::with_id("waqt")
         .icon(app.default_window_icon().expect("bundle icon is configured").clone())
@@ -48,7 +50,7 @@ pub fn build(app: &AppHandle, on_menu: fn(&AppHandle, &str)) -> tauri::Result<Tr
         .menu(&menu)
         .on_menu_event(move |app, e| on_menu(app, e.id().as_ref()))
         .build(app)?;
-    Ok(Tray { icon, header, lines, hijri })
+    Ok(Tray { icon, header, lines, hijri, stop })
 }
 
 /// Redraws badge, tooltip and menu for `now` and returns the next prayer instant.
@@ -74,6 +76,13 @@ pub fn show(app: &AppHandle, cfg: Option<&Config>, now: DateTime<Utc>) -> tauri:
     }
     t.hijri.set_text(format!("{} · {}", hijri::label(date, cfg.hijri_offset), cfg.place))?;
     Ok(Some(next.at))
+}
+
+/// Enables "Stop adhan" while the adhan plays.
+pub fn set_playing(app: &AppHandle, playing: bool) {
+    if let Err(e) = app.state::<Tray>().stop.set_enabled(playing) {
+        eprintln!("waqt: tray menu update failed: {e}");
+    }
 }
 
 /// Badge text and colors: minutes under 100 (gold in the last 15), else hours on night blue.

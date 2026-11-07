@@ -1,5 +1,5 @@
 // Settings window: fill the form, live-preview today's times, save through Rust.
-import { type Config, getConfig, preview, saveConfig } from "./api.ts";
+import { type Config, getConfig, preview, saveConfig, stopAdhan, testAdhan } from "./api.ts";
 import { type Madhab, METHODS, type Method, suggest } from "./methods.ts";
 import { bindPlace } from "./place.ts";
 
@@ -119,6 +119,8 @@ for (const el of [lat, lon]) {
     city.value = "";
   });
 }
+$("test").addEventListener("click", () => void testAdhan(volume.valueAsNumber).catch((e) => showError(String(e))));
+$("stop").addEventListener("click", () => void stopAdhan().catch((e) => showError(String(e))));
 form.addEventListener("input", later);
 form.addEventListener("change", later);
 form.addEventListener("submit", async (e) => {

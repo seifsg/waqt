@@ -24,3 +24,5 @@ export interface Preview {
 export const getConfig = (): Promise<Config | null> => invoke("get_config");
 export const preview = (cfg: Config): Promise<Preview> => invoke("preview", { cfg });
 export const saveConfig = (cfg: Config): Promise<void> => invoke("save_config", { cfg });
+export const testAdhan = (volume: number): Promise<void> => invoke("test_adhan", { volume });
+export const stopAdhan = (): Promise<void> => invoke("stop_adhan");

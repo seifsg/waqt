@@ -34,6 +34,7 @@ impl Shared {
 
 fn on_menu(app: &AppHandle, id: &str) {
     match id {
+        "stop" => alert::stop(app),
         "settings" => settings::open(app).unwrap_or_else(|e| eprintln!("waqt: settings window: {e}")),
         "quit" => app.exit(0),
         _ => {}
@@ -50,9 +51,20 @@ fn load_config(app: &AppHandle) -> Option<Config> {
 
 fn main() {
     tauri::Builder::default()
+        // Must be first: a second launch only opens Settings in the running instance.
+        .plugin(tauri_plugin_single_instance::init(|app, _, _| {
+            settings::open(app).unwrap_or_else(|e| eprintln!("waqt: settings window: {e}"));
+        }))
         .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_autostart::init(tauri_plugin_autostart::MacosLauncher::LaunchAgent, None))
-        .invoke_handler(tauri::generate_handler![settings::get_config, settings::preview, settings::save_config])
+        .invoke_handler(tauri::generate_handler![
+            settings::get_config,
+            settings::preview,
+            settings::save_config,
+            settings::test_adhan,
+            settings::stop_adhan
+        ])
+        .manage(alert::Adhan::default())
         .setup(|app| {
             app.manage(tray::build(app.handle(), on_menu)?);
             let cfg = load_config(app.handle());

@@ -5,7 +5,7 @@ use tauri_plugin_autostart::ManagerExt;
 
 use serde::Serialize;
 
-use crate::{Shared, clock, config::{self, Config}, hijri, times, tray};
+use crate::{Shared, alert, clock, config::{self, Config}, hijri, times, tray};
 
 const LABEL: &str = "settings";
 
@@ -73,4 +73,16 @@ pub fn save_config(app: AppHandle, cfg: Config) -> Result<(), String> {
         w.close().map_err(|e| e.to_string())?;
     }
     Ok(())
+}
+
+/// Plays the adhan at `volume` so the user can hear it before saving.
+#[tauri::command]
+pub fn test_adhan(app: AppHandle, volume: u8) {
+    alert::play(&app, volume.min(100));
+}
+
+/// Stops a playing adhan.
+#[tauri::command]
+pub fn stop_adhan(app: AppHandle) {
+    alert::stop(&app);
 }

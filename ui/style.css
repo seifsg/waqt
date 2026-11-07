@@ -156,7 +156,15 @@ legend { margin-bottom: 6px; padding: 0; }
 #times time { color: var(--muted); }
 #times li.next time { color: var(--text); }
 
-.volume { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 12px; margin-bottom: 14px; }
+.volume { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; margin-bottom: 14px; }
+.listen { display: flex; gap: 6px; }
+button.ghost {
+  padding: 6px 10px; font: 500 13px var(--font);
+  color: var(--text); background: var(--field);
+  border: 1px solid var(--field-line); border-radius: 9px; cursor: pointer;
+  transition: border-color 120ms, background 120ms;
+}
+button.ghost:hover { border-color: var(--teal); }
 input[type="range"] { width: 100%; accent-color: var(--teal); }
 
 .switch { display: flex; align-items: center; gap: 10px; cursor: pointer; }
