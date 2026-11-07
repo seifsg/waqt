@@ -16,7 +16,7 @@ Windows 11 puts new tray icons in the overflow (the ^ arrow). Drag Waqt's icon o
 
 ## Run from source
 
-Needs [Rust](https://rustup.rs) (`rust-toolchain.toml` pins 1.99.1; MSVC toolchain on Windows), Node.js 20.19+ or 22.12+ (22.18+ for `npm run cities`), and the WebView2 runtime (built into Windows 11).
+Needs [Rust](https://rustup.rs) (`rust-toolchain.toml` pins 1.99.1; MSVC toolchain on Windows), Node.js 22.18+ (24 recommended; the build scripts run TypeScript directly), and the WebView2 runtime (built into Windows 11).
 
 ```bash
 npm ci
