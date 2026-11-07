@@ -101,7 +101,11 @@ select {
 select option { color: #0b1626; }
 input[type="number"] { appearance: textfield; }
 input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button { appearance: none; margin: 0; }
-input[aria-invalid="true"] { border-color: var(--danger); }
+/* Invalid wins over the focus ring, so the field stays red while it is being fixed. */
+input[aria-invalid="true"], input[aria-invalid="true"]:focus-visible {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--danger) 30%, transparent);
+}
 input:focus-visible, select:focus-visible, button:focus-visible, .seg input:focus-visible + span, .chips input:focus-visible + span {
   border-color: var(--teal);
   box-shadow: 0 0 0 3px rgb(43 179 163 / 0.3);
