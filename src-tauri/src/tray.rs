@@ -36,10 +36,11 @@ pub fn build(app: &AppHandle, on_menu: fn(&AppHandle, &str)) -> tauri::Result<Tr
     let [a, b, c, d, e] = lines;
     let lines = [a?, b?, c?, d?, e?];
     let sep = || PredefinedMenuItem::separator(app);
+    let settings = MenuItem::with_id(app, "settings", "Settings…", true, None::<&str>)?;
     let quit = MenuItem::with_id(app, "quit", "Quit Waqt", true, None::<&str>)?;
     let menu = Menu::with_items(
         app,
-        &[&header, &sep()?, &lines[0], &lines[1], &lines[2], &lines[3], &lines[4], &hijri, &sep()?, &quit],
+        &[&header, &sep()?, &lines[0], &lines[1], &lines[2], &lines[3], &lines[4], &hijri, &sep()?, &settings, &quit],
     )?;
     let icon = TrayIconBuilder::with_id("waqt")
         .icon(app.default_window_icon().expect("bundle icon is configured").clone())
