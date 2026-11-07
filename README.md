@@ -48,7 +48,7 @@ Settings: 12 calculation methods, Standard or Hanafi Asr, a Hijri date adjustmen
 ## Privacy and footprint
 
 - No account, no analytics, no network from Waqt: prayer times are computed on your PC and Waqt opens no sockets.
-- The settings window is drawn by Microsoft's WebView2 (part of Windows) with its web networking switched off, and exists only while it is open. While it is open, the WebView2 runtime itself may still connect to Microsoft: in our test, one TLS connection to an Office 365 server (certificate for outlook.com and *.office.com) about 35 seconds after the window opened. Microsoft does not document why, and the connection bypasses WebView2's proxy setting, so Waqt cannot block it.
+- The settings window is drawn by Microsoft's WebView2 (part of Windows) with its web networking switched off, and exists only while it is open. While it is open, the WebView2 runtime itself may still connect to Microsoft: in our test, one TLS connection to an Office 365 server (certificate for outlook.com and *.office.com) about 35 seconds after the window opened. Microsoft does not document why, and Waqt's offline flags do not stop it.
 - About 13 MB of memory and no measurable CPU while it waits (about 30 MB after you have opened Settings, until Waqt restarts); it wakes at each minute and each prayer.
 - Your settings live in `%APPDATA%\dev.seif.waqt\config.json`; errors are logged on your PC only, in `%LOCALAPPDATA%\dev.seif.waqt\logs\waqt.log` (under 1 MB).
 
