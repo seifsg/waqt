@@ -21,7 +21,7 @@ const ON_TIME: Duration = Duration::minutes(2);
 
 /// The adhan now playing, if any, and a generation that every play and stop bumps, so a
 /// player that registers after it was stopped or replaced never plays. The lock is never
-/// held across a tray call (those wait for the main thread).
+/// held across a tray call (off the main thread, those wait for it).
 #[derive(Default)]
 pub struct Adhan(Mutex<(u64, Option<Arc<Player>>)>);
 
@@ -62,11 +62,10 @@ pub fn play(app: &AppHandle, volume: u8) {
         if !swap(&app, me, Some(player.clone())) {
             return player.stop(); // stopped or replaced while the device opened
         }
-        tray::set_playing(&app, true);
+        sync_row(&app);
         player.sleep_until_end();
-        if swap(&app, me, None) {
-            tray::set_playing(&app, false);
-        }
+        swap(&app, me, None);
+        sync_row(&app);
     });
 }
 
@@ -79,9 +78,22 @@ pub fn stop(app: &AppHandle) -> u64 {
     };
     if let Some(p) = old {
         p.stop();
-        tray::set_playing(app, false);
+        sync_row(app);
     }
     generation
+}
+
+/// Enables "Stop adhan" exactly while one plays. It reads the slot on the main thread, where
+/// these run one by one, so the last sync after any change shows the final state.
+fn sync_row(app: &AppHandle) {
+    let main = app.clone();
+    let sync = move || {
+        let playing = lock(&main).1.is_some();
+        tray::set_playing(&main, playing);
+    };
+    if let Err(e) = app.run_on_main_thread(sync) {
+        eprintln!("waqt: tray menu update failed: {e}");
+    }
 }
 
 /// Sets the playing slot if `generation` is still current; returns whether it was.
