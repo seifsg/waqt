@@ -3,10 +3,12 @@
 
 use chrono::{DateTime, Duration, Utc};
 
+/// Current time (shifted in debug builds when asked).
 pub fn now() -> DateTime<Utc> {
     Utc::now() + shift()
 }
 
+/// Debug-only offset read once from `WAQT_SHIFT_SECS`.
 #[cfg(debug_assertions)]
 fn shift() -> Duration {
     static SHIFT: std::sync::OnceLock<Duration> = std::sync::OnceLock::new();
@@ -16,6 +18,7 @@ fn shift() -> Duration {
     })
 }
 
+/// Release builds never shift the clock.
 #[cfg(not(debug_assertions))]
 fn shift() -> Duration {
     Duration::zero()

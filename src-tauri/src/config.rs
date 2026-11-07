@@ -21,6 +21,7 @@ pub struct Config {
     pub autostart: bool,
 }
 
+/// `Ok` when `ok`, else the user-facing `msg`.
 fn check(ok: bool, msg: &str) -> Result<(), String> {
     if ok { Ok(()) } else { Err(msg.to_owned()) }
 }

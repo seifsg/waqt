@@ -14,8 +14,8 @@ Waqt stands on these works. Thank you.
 
 | Library | License | Use |
 |---|---|---|
-| [salah](https://github.com/insha/salah) (pinned commit `adc8f592c4`) | MIT | Prayer-time calculation |
-| [Adhan](https://github.com/batoulapps/adhan-js) test timetables | MIT | Reference times in `src-tauri/src/times.rs` tests |
+| [salah](https://github.com/insha/salah) (`main` at `adc8f592c4`, vendored in `src-tauri/vendor/salah` with two fixes, see its `PATCHES.md`) | MIT | Prayer-time calculation |
+| [Adhan](https://github.com/batoulapps/adhan-js) test timetables and adhan-js 4.4.6 | MIT | Reference times in `src-tauri/src/times.rs` tests |
 | [ICU4X `icu_calendar`](https://github.com/unicode-org/icu4x) | Unicode-3.0 | Umm al-Qura Hijri dates |
 | [Tauri](https://tauri.app) and its notification, autostart and single-instance plugins | MIT or Apache-2.0 | Tray, window, notifications |
 | [rodio](https://github.com/RustAudio/rodio) | MIT or Apache-2.0 | Adhan playback |

@@ -30,10 +30,10 @@ pub struct Tray {
 
 /// Creates the tray with its menu; menu clicks go to `on_menu`.
 pub fn build(app: &AppHandle, on_menu: fn(&AppHandle, &str)) -> tauri::Result<Tray> {
-    let info = |id: &str| MenuItem::with_id(app, id, "", false, None::<&str>);
+    let info = |id: &str| MenuItem::with_id(app, id, "", true, None::<&str>);
     let header = info("header")?;
     let hijri = info("hijri")?;
-    let lines = times::PRAYERS.map(|p| CheckMenuItem::with_id(app, p.name(), p.name(), false, false, None::<&str>));
+    let lines = times::PRAYERS.map(|p| CheckMenuItem::with_id(app, p.name(), p.name(), true, false, None::<&str>));
     let [a, b, c, d, e] = lines;
     let lines = [a?, b?, c?, d?, e?];
     let sep = || PredefinedMenuItem::separator(app);
@@ -67,7 +67,7 @@ pub fn show(app: &AppHandle, cfg: Option<&Config>, now: DateTime<Utc>) -> tauri:
     let (text, look) = badge(mins);
     t.icon.set_icon(Some(Image::new_owned(icon::render(&text, look, tray_px()), tray_px(), tray_px())))?;
     let head = format!("{} in {} · {}", next.label(), left(mins), clock(next.at));
-    t.icon.set_tooltip(Some(format!("{head}\n{}", cfg.place).chars().take(120).collect::<String>()))?;
+    t.icon.set_tooltip(Some(fit_tooltip(&format!("{head}\n{}", cfg.place))))?;
     t.header.set_text(&head)?;
     let (date, day) = times::day_of(cfg, next);
     for (item, slot) in t.lines.iter().zip(day) {
@@ -93,6 +93,12 @@ fn badge(mins: i64) -> (String, Look) {
         _ if mins < 600 => (format!("{}h", mins / 60), NIGHT),
         _ => ((mins / 60).to_string(), NIGHT),
     }
+}
+
+/// Cuts `text` to 120 UTF-16 units: Windows tooltips hold 127 plus a terminator.
+fn fit_tooltip(text: &str) -> String {
+    let mut units = 0;
+    text.chars().take_while(|c| { units += c.len_utf16(); units <= 120 }).collect()
 }
 
 /// "45m" or "2h 05m".

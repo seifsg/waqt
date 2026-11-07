@@ -31,12 +31,12 @@
           <div class="combo">
             <label for="city">City</label>
             <input id="city" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false"
-              aria-controls="city-list" autocomplete="off" spellcheck="false" placeholder="Search 170,000 places, e.g. Tunis" />
+              aria-controls="city-list" aria-describedby="error" autocomplete="off" spellcheck="false" placeholder="Search 170,000 places, e.g. Tunis" />
             <ul id="city-list" role="listbox" aria-label="Matching places" hidden></ul>
           </div>
           <div class="pair">
-            <label>Latitude <input id="lat" type="number" step="any" min="-90" max="90" inputmode="decimal" placeholder="36.8065" /></label>
-            <label>Longitude <input id="lon" type="number" step="any" min="-180" max="180" inputmode="decimal" placeholder="10.1815" /></label>
+            <label>Latitude <input id="lat" aria-describedby="error" type="number" step="any" min="-90" max="90" inputmode="decimal" placeholder="36.8065" /></label>
+            <label>Longitude <input id="lon" aria-describedby="error" type="number" step="any" min="-180" max="180" inputmode="decimal" placeholder="10.1815" /></label>
           </div>
           <p id="polar" class="note" hidden>Far north or south the sun may not set or rise. Times use latitude 65°, the nearest latitude where they exist.</p>
         </section>
@@ -59,7 +59,7 @@
           </fieldset>
         </section>
 
-        <section class="card preview" aria-labelledby="h-times" aria-live="polite">
+        <section class="card preview" aria-labelledby="h-times">
           <div class="preview-head">
             <h2 id="h-times">Prayer times</h2>
             <p id="hijri" class="muted"></p>
@@ -82,7 +82,7 @@
             <label for="volume">Volume</label>
             <input id="volume" type="range" min="0" max="100" step="5" value="80" />
             <div class="listen">
-              <button id="test" type="button" class="ghost" aria-label="Play the adhan at this volume">▶ Test</button>
+              <button id="test" type="button" class="ghost" aria-label="Test the adhan at this volume">▶ Test</button>
               <button id="stop" type="button" class="ghost" aria-label="Stop the adhan">■ Stop</button>
             </div>
           </div>

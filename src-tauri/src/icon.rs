@@ -18,9 +18,9 @@ pub struct Look {
 pub fn render(text: &str, look: Look, size: u32) -> Vec<u8> {
     let s = size as usize;
     let mut px = vec![0u8; s * s * 4];
-    let r = size as f32 / 4.0;
-    for (i, p) in px.chunks_exact_mut(4).enumerate() {
-        p.copy_from_slice(&[look.bg[0], look.bg[1], look.bg[2], corner_alpha(i % s, i / s, size as f32, r)]);
+    let r = size as f32 / 5.0;
+    for (i, p) in px.as_chunks_mut::<4>().0.iter_mut().enumerate() {
+        *p = [look.bg[0], look.bg[1], look.bg[2], corner_alpha(i % s, i / s, size as f32, r)];
     }
     let k = ((size - 2) / 7).min((size - 4) / 5).max(1) as usize;
     let glyphs: Vec<&[u8; 5]> = text

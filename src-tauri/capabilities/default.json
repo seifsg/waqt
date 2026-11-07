@@ -3,5 +3,5 @@
   "identifier": "settings",
   "description": "The settings window only talks to Waqt's own commands.",
   "windows": ["settings"],
-  "permissions": ["core:default"]
+  "permissions": []
 }

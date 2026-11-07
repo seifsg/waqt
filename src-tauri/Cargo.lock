@@ -3257,7 +3257,6 @@ checksum = "cf54715a573b99ac80df0bc206da022bcd442c974952c7b9720069370852e21f"
 [[package]]
 name = "salah"
 version = "0.7.6"
-source = "git+https://github.com/insha/salah?rev=adc8f592c4#adc8f592c434cdca9dedfeb9bf976f4745132473"
 dependencies = [
  "chrono",
  "serde",

@@ -27,7 +27,7 @@ export function drawBadge(canvas: HTMLCanvasElement, text: string, look: Look): 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = look.bg;
   ctx.beginPath();
-  ctx.roundRect(0, 0, canvas.width, canvas.height, 4 * unit);
+  ctx.roundRect(0, 0, canvas.width, canvas.height, 3.2 * unit); // radius = size / 5, as in the app
   ctx.fill();
   ctx.fillStyle = look.fg;
   const k = 2; // glyph scale at 16 px, as in the app

@@ -16,7 +16,7 @@ Windows 11 puts new tray icons in the overflow (the ^ arrow). Drag Waqt's icon o
 
 ## Run from source
 
-Needs [Rust](https://rustup.rs) (stable, MSVC toolchain on Windows), Node.js 20.19+ or 22.12+, and the WebView2 runtime (built into Windows 11).
+Needs [Rust](https://rustup.rs) (`rust-toolchain.toml` pins 1.99.1; MSVC toolchain on Windows), Node.js 20.19+ or 22.12+ (22.18+ for `npm run cities`), and the WebView2 runtime (built into Windows 11).
 
 ```bash
 npm ci
@@ -47,16 +47,20 @@ Settings: 12 calculation methods, Standard or Hanafi Asr, a Hijri date adjustmen
 
 ## Privacy and footprint
 
-- No account, no analytics, no network: prayer times are computed on your PC, and Waqt opens no sockets.
-- About 13 MB of memory and no measurable CPU while it waits; it wakes at each minute and each prayer.
+- No account, no analytics, no network: prayer times are computed on your PC, and Waqt itself opens no sockets. The settings window is drawn by Windows' WebView2 and exists only while it is open.
+- About 13 MB of memory and no measurable CPU while it waits (about 30 MB after you have opened Settings, until Waqt restarts); it wakes at each minute and each prayer.
 - Your settings live in `%APPDATA%\dev.seif.waqt\config.json`.
+
+## Platforms
+
+Built and tested on Windows 11. Windows 10 with WebView2 should work but is untested. The code compiles for macOS and Linux through Tauri; they are untested.
 
 ## Releases
 
-Pushing a tag such as `v0.1.0` (matching the version in `src-tauri/tauri.conf.json`) builds the installer and attaches it to that tag's GitHub Release as `Waqt-setup.exe`. Pull requests build it as a downloadable artifact.
+Pushing a tag such as `v0.1.0` (matching the version in `src-tauri/tauri.conf.json`) builds the installer and attaches it to that tag's GitHub Release as `Waqt-setup.exe`, with its SHA-256 in `Waqt-setup.exe.sha256`. Pull requests build both as a downloadable artifact.
 
 ## Credits
 
-Prayer-time math by [salah](https://github.com/insha/salah), a Rust port of Batoul Apps' [Adhan](https://github.com/batoulapps/adhan-js). Place data © [GeoNames](https://www.geonames.org/) (CC BY 4.0). Adhan recording: CC0, Wikimedia Commons. Full list in [CREDITS.md](CREDITS.md).
+Prayer-time math by [salah](https://github.com/insha/salah), a Rust port of Batoul Apps' [Adhan](https://github.com/batoulapps/adhan-js), vendored with two fixes ([PATCHES.md](src-tauri/vendor/salah/PATCHES.md)). Place data © [GeoNames](https://www.geonames.org/) (CC BY 4.0). Adhan recording: CC0, Wikimedia Commons. Full list in [CREDITS.md](CREDITS.md).
 
 🏭 Built with [AI Software Factory](https://softwarefactory.company/) by Seif

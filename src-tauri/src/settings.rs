@@ -15,9 +15,12 @@ pub fn open(app: &AppHandle) -> tauri::Result<()> {
         w.unminimize()?;
         return w.set_focus();
     }
+    // 780 px tall, or 90% of a smaller screen so Save stays reachable.
+    let screen = app.primary_monitor()?.map(|m| f64::from(m.size().height) / m.scale_factor());
+    let height = screen.map_or(780.0, |h| (h * 0.9).min(780.0));
     WebviewWindowBuilder::new(app, LABEL, WebviewUrl::App("index.html".into()))
         .title("Waqt settings")
-        .inner_size(480.0, 780.0)
+        .inner_size(480.0, height)
         .min_inner_size(400.0, 560.0)
         .center()
         .build()
@@ -64,9 +67,10 @@ pub fn preview(cfg: Config) -> Result<Preview, String> {
 #[tauri::command]
 pub fn save_config(app: AppHandle, cfg: Config) -> Result<(), String> {
     cfg.validate()?;
-    config::save(&config::path(&app), &cfg)?;
+    // Autostart first: if Windows refuses it, nothing is saved and nothing disagrees.
     let launch = app.autolaunch();
     if cfg.autostart { launch.enable() } else { launch.disable() }.map_err(|e| format!("Start with Windows: {e}"))?;
+    config::save(&config::path(&app), &cfg)?;
     app.state::<Shared>().set(cfg.clone());
     tray::show(&app, Some(&cfg), clock::now()).map_err(|e| e.to_string())?;
     if let Some(w) = app.get_webview_window(LABEL) {
@@ -85,4 +89,11 @@ pub fn test_adhan(app: AppHandle, volume: u8) {
 #[tauri::command]
 pub fn stop_adhan(app: AppHandle) {
     alert::stop(&app);
+}
+
+/// Opens Settings, telling the user in a toast if Windows cannot show the window.
+pub fn open_or_report(app: &AppHandle) {
+    if let Err(e) = open(app) {
+        alert::notify(app, "Waqt settings could not open", &e.to_string(), true);
+    }
 }

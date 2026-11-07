@@ -78,6 +78,9 @@ h1 { margin: 0; font-size: clamp(38px, 5.4vw, 64px); line-height: 1.04; letter-s
   background: rgb(243 243 243 / 0.92); color: #1b1b1b; font-size: 13px;
 }
 #badge { width: 32px; height: 32px; image-rendering: pixelated; }
+/* Countdown digit roll: each new value drops in over 150 ms. */
+.roll { animation: roll 150ms ease-out; }
+@keyframes roll { from { transform: translateY(-30%); opacity: 0; } }
 .chev { opacity: 0.6; }
 .clock { font-variant-numeric: tabular-nums; }
 
@@ -121,5 +124,5 @@ section h2 { font-size: clamp(26px, 3.4vw, 38px); letter-spacing: -0.02em; line-
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  * { transition: none !important; }
+  * { transition: none !important; animation: none !important; }
 }

@@ -21,10 +21,12 @@ pub enum Prayer {
 pub const PRAYERS: [Prayer; 5] = [Prayer::Fajr, Prayer::Dhuhr, Prayer::Asr, Prayer::Maghrib, Prayer::Isha];
 
 impl Prayer {
+    /// English name shown in the tray and toasts.
     pub fn name(self) -> &'static str {
         ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"][self as usize]
     }
 
+    /// The matching salah library prayer.
     fn salah(self) -> salah::prelude::Prayer {
         use salah::prelude::Prayer as P;
         [P::Fajr, P::Dhuhr, P::Asr, P::Maghrib, P::Isha][self as usize]
@@ -138,6 +140,23 @@ mod tests {
         golden(&c, ymd(2016, 1, 1), 3, ["05:18", "11:51", "14:42", "17:01", "18:23"], 2);
     }
 
+    // Reference implementation: Batoul Apps adhan-js 4.4.6, times in UTC.
+    #[test]
+    fn southern_moonsighting_committee_matches_adhan_js() {
+        let c = cfg(-33.92, 18.42, Method::MoonsightingCommittee, Madhab::Shafi); // Cape Town
+        golden(&c, ymd(2026, 1, 15), 0, ["02:11", "11:01", "14:40", "18:03", "19:14"], 1);
+        golden(&c, ymd(2026, 7, 15), 0, ["04:21", "10:57", "13:37", "15:59", "17:22"], 1);
+        golden(&c, ymd(2026, 9, 30), 0, ["03:01", "10:41", "14:08", "16:51", "18:03"], 1);
+    }
+
+    #[test]
+    fn times_rounding_to_midnight_utc_match_adhan_js() {
+        let mexico = cfg(19.43, -99.13, Method::MuslimWorldLeague, Madhab::Shafi);
+        golden(&mexico, ymd(2026, 11, 7), 0, ["11:25", "18:21", "21:35", "00:00", "01:11"], 1);
+        let new_york = cfg(40.71, -74.01, Method::MuslimWorldLeague, Madhab::Shafi);
+        golden(&new_york, ymd(2026, 5, 7), 0, ["07:59", "16:54", "20:47", "23:58", "01:40"], 1);
+    }
+
     #[test]
     fn method_and_asr_choice_change_times() {
         let date = ymd(2026, 11, 7);
@@ -173,12 +192,23 @@ mod tests {
     }
 
     #[test]
-    fn high_and_polar_latitudes_never_panic_and_stay_ordered() {
-        for (lat, lon) in [(51.5074, -0.1278), (59.91, 10.75), (69.65, 18.95), (78.22, 15.65), (-54.8, -68.3)] {
-            for date in [ymd(2026, 6, 21), ymd(2026, 12, 21)] {
-                for m in [Method::MuslimWorldLeague, Method::MoonsightingCommittee, Method::UmmAlQura] {
-                    let s = day(&cfg(lat, lon, m, Madhab::Shafi), date);
-                    assert!(s.windows(2).all(|w| w[0].at <= w[1].at), "{lat} {date} {m:?} out of order");
+    fn every_method_at_every_latitude_never_panics_and_stays_ordered() {
+        use Method::*;
+        let methods = [
+            MuslimWorldLeague, Egyptian, Karachi, UmmAlQura, Dubai, MoonsightingCommittee,
+            NorthAmerica, Kuwait, Qatar, Singapore, Tehran, Turkey,
+        ];
+        for lat in [-90.0, -65.0, -60.0, -48.5, 0.0, 21.4, 48.5, 51.5, 60.0, 65.0, 69.65, 90.0] {
+            for lon in [-180.0, 0.0, 179.9] {
+                for month in 1..=12 {
+                    for (m, h) in methods.iter().flat_map(|&m| [(m, Madhab::Shafi), (m, Madhab::Hanafi)]) {
+                        let c = cfg(lat, lon, m, h);
+                        if c.validate_math().is_err() {
+                            continue; // rejected at entry, never computed
+                        }
+                        let s = day(&c, ymd(2026, month, 21));
+                        assert!(s.windows(2).all(|w| w[0].at <= w[1].at), "{lat},{lon} month {month} {m:?} {h:?} out of order");
+                    }
                 }
             }
         }

@@ -32,12 +32,21 @@ impl Shared {
     }
 }
 
+/// Handles a tray menu click by item id.
 fn on_menu(app: &AppHandle, id: &str) {
     match id {
-        "stop" => alert::stop(app),
-        "settings" => settings::open(app).unwrap_or_else(|e| eprintln!("waqt: settings window: {e}")),
+        "stop" => {
+            alert::stop(app);
+        }
+        "settings" => settings::open_or_report(app),
         "quit" => app.exit(0),
-        _ => {}
+        // Info rows are enabled for contrast; a click toggles a check mark, so redraw at once.
+        _ => {
+            let cfg = app.state::<Shared>().config();
+            if let Err(e) = tray::show(app, cfg.as_ref(), clock::now()) {
+                eprintln!("waqt: tray update failed: {e}");
+            }
+        }
     }
 }
 
@@ -49,11 +58,12 @@ fn load_config(app: &AppHandle) -> Option<Config> {
     })
 }
 
+/// Builds the tray-only app: plugins, commands, tray, config, ticker; never exits on window close.
 fn main() {
     tauri::Builder::default()
         // Must be first: a second launch only opens Settings in the running instance.
         .plugin(tauri_plugin_single_instance::init(|app, _, _| {
-            settings::open(app).unwrap_or_else(|e| eprintln!("waqt: settings window: {e}"));
+            settings::open_or_report(app);
         }))
         .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_autostart::init(tauri_plugin_autostart::MacosLauncher::LaunchAgent, None))

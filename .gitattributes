@@ -1,1 +1,2 @@
 ui/public/cities.tsv -text -diff linguist-generated
+src-tauri/vendor/** linguist-vendored

@@ -13,8 +13,8 @@ tauri = { version = "2.12", features = ["tray-icon"] }
 tauri-plugin-notification = "2.7"
 tauri-plugin-autostart = "2.7"
 tauri-plugin-single-instance = "2.5"
-# Pinned to main: fixes the 48-66.5 deg panics (issue #19) and adds serde; crates.io 0.7.6 lacks both.
-salah = { git = "https://github.com/insha/salah", rev = "adc8f592c4", features = ["serde"] }
+# salah main @adc8f592c4 (fixes 48-66.5 deg panics, adds serde), vendored with two patches: see vendor/salah/PATCHES.md.
+salah = { path = "vendor/salah", features = ["serde"] }
 chrono = "0.4.42"
 icu_calendar = "2.4"
 rodio = { version = "0.23", default-features = false, features = ["playback", "vorbis"] }

@@ -18,6 +18,13 @@ const hhmm = (m: number): string => `${String(Math.floor(m / 60) % 24).padStart(
 const left = (m: number): string => (m < 60 ? `${m}m` : `${Math.floor(m / 60)}h ${String(m % 60).padStart(2, "0")}m`);
 let now = 894 - 18; // 18 minutes before Asr
 
+/** Restarts the short roll-in animation on `el` (CSS class `roll`). */
+function roll(el: HTMLElement): void {
+  el.classList.remove("roll");
+  void el.offsetWidth; // reflow so the animation plays again
+  el.classList.add("roll");
+}
+
 /** Shows the badge and tooltip for the virtual clock, then moves it on (faster while far away). */
 function tick(): void {
   const [name, at] = DAY.find(([, t]) => t > now) ?? ["Fajr", DAY[0]![1] + 1440];
@@ -25,6 +32,8 @@ function tick(): void {
   const { text, look } = badgeFor(mins);
   drawBadge(canvas, text, look);
   tip.textContent = `${name} in ${left(mins)} · ${hhmm(at)}`;
+  roll(canvas);
+  roll(tip);
   clock.textContent = hhmm(now);
   now = (now + (mins > 30 ? 5 : 1)) % 1440;
 }
