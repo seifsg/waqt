@@ -18,6 +18,7 @@ const method = $<HTMLSelectElement>("method");
 const volume = $<HTMLInputElement>("volume");
 const autostart = $<HTMLInputElement>("autostart");
 const error = $<HTMLParagraphElement>("error");
+const fieldError = $<HTMLParagraphElement>("field-error");
 const save = $<HTMLButtonElement>("save");
 const adhan = [...form.querySelectorAll<HTMLInputElement>('input[name="adhan"]')];
 const PRAYERS = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
@@ -39,11 +40,15 @@ const setRadio = (name: string, value: string): void => {
 const FIELDS: ReadonlyArray<[string, HTMLElement[]]> = [
   ["Latitude", [lat]], ["Longitude", [lon]], ["Name the place", [city]], ["Pick a city", [city, lat, lon]],
 ];
-/** Shows `msg` (empty hides it) and marks the fields it is about. */
+/** Shows `msg` (empty hides it): under the place fields when it is about them, else in the
+ * footer; marks those fields invalid. */
 const showError = (msg: string): void => {
-  error.textContent = msg;
-  error.hidden = !msg;
   const bad = new Set(FIELDS.filter(([prefix]) => msg.startsWith(prefix)).flatMap(([, els]) => els));
+  const near = bad.size > 0;
+  fieldError.textContent = near ? msg : "";
+  fieldError.hidden = !near;
+  error.textContent = near ? "" : msg;
+  error.hidden = near || !msg;
   for (const el of [city, lat, lon]) {
     if (bad.has(el)) el.setAttribute("aria-invalid", "true"); // an empty value reads as "false"
     else el.removeAttribute("aria-invalid");
