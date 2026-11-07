@@ -1,0 +1,32 @@
+[package]
+name = "waqt"
+version = "0.1.0"
+description = "Offline prayer time countdown in your tray"
+edition = "2024"
+publish = false
+
+[build-dependencies]
+tauri-build = { version = "2.7", features = [] }
+
+[dependencies]
+tauri = { version = "2.12", features = ["tray-icon"] }
+tauri-plugin-notification = "2.7"
+tauri-plugin-autostart = "2.7"
+tauri-plugin-single-instance = "2.5"
+# salah main @adc8f592c4 (fixes 48-66.5 deg panics, adds serde), vendored with two patches: see vendor/salah/PATCHES.md.
+salah = { path = "vendor/salah", features = ["serde"] }
+chrono = "0.4.42"
+icu_calendar = "2.4"
+rodio = { version = "0.23", default-features = false, features = ["playback", "vorbis"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.61", features = ["Win32_UI_WindowsAndMessaging"] }
+
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

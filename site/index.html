@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Waqt · prayer time countdown in your Windows tray</title>
+    <meta name="description" content="Waqt is a tiny Windows tray app that counts down to the next prayer, offline: no account, no tracking, about 13 MB of memory while it waits in the tray." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Waqt · the next prayer, always in your tray" />
+    <meta property="og:description" content="A tiny, offline Windows tray app that counts down to the next prayer." />
+    <meta property="og:url" content="https://waqt.beast.dev/" />
+    <meta property="og:image" content="https://waqt.beast.dev/shots/og.png" />
+    <meta name="theme-color" content="#0b1626" />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <script type="module" src="./main.ts"></script>
+  </head>
+  <body>
+    <header class="top">
+      <a class="mark" href="#">
+        <img src="/icon.svg" alt="" width="32" height="32" />
+        <span>Waqt</span>
+      </a>
+      <nav aria-label="Page">
+        <a href="#features">Features</a>
+        <a href="#privacy">Privacy</a>
+        <a href="https://github.com/seifsg/waqt">GitHub</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="pitch">
+          <p class="eyebrow">Free · Windows 11 · Offline</p>
+          <h1>The next prayer, always in your tray.</h1>
+          <p class="lede">Waqt is a tiny Windows tray app that counts down to the next prayer. Set your city once; it works offline from then on.</p>
+          <div class="cta">
+            <a class="download" href="https://github.com/seifsg/waqt/releases/latest/download/Waqt-setup.exe">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 19h16" /></svg>
+              Download for Windows
+            </a>
+            <a class="ghost" href="https://github.com/seifsg/waqt">View the source</a>
+          </div>
+          <p class="fine">4.5 MB installer · no account · no admin rights needed</p>
+        </div>
+
+        <div class="demo" aria-label="Live demo of the tray countdown">
+          <div class="tooltip" id="tip" aria-live="off">Asr in 18m · 15:42</div>
+          <div class="taskbar">
+            <span class="chev" aria-hidden="true">⌃</span>
+            <canvas id="badge" width="64" height="64" role="img" aria-label="Tray badge showing minutes left"></canvas>
+            <span class="lang" aria-hidden="true">ENG</span>
+            <span class="clock" aria-hidden="true">15:24</span>
+          </div>
+          <img class="menu" src="/shots/menu.png" width="324" height="212" alt="Waqt's tray menu: today's five prayer times with Asr ticked as next, the Hijri date, Stop adhan, Settings and Quit." />
+        </div>
+      </section>
+
+      <section id="features" class="features" aria-labelledby="f-title">
+        <h2 id="f-title">Everything a prayer clock needs. Nothing it doesn't.</h2>
+        <div class="grid">
+          <article>
+            <h3>Always visible</h3>
+            <p>The tray badge shows minutes left, turns gold in the last 15, and switches to hours when the next prayer is far. Hover for the name and time.</p>
+          </article>
+          <article>
+            <h3>Accurate, your way</h3>
+            <p>Twelve calculation methods, from Muslim World League to Umm al-Qura, Diyanet and ISNA, plus Standard or Hanafi Asr. Tested against published timetables.</p>
+          </article>
+          <article>
+            <h3>Adhan, if you want it</h3>
+            <p>A notification at every prayer, with the adhan per prayer at your volume. Stop it from the tray menu.</p>
+          </article>
+          <article>
+            <h3>Ramadan ready</h3>
+            <p>During Ramadan the countdown to Maghrib becomes your iftar countdown, with a Hijri date you can adjust for local moon sighting.</p>
+          </article>
+          <article>
+            <h3>Set once</h3>
+            <p>Search 171,806 places offline, or type your coordinates. Waqt picks your country's usual method for you.</p>
+          </article>
+          <article>
+            <h3>Featherweight</h3>
+            <p>About 13 MB of memory and no measurable CPU while it waits (about 30 MB once Settings has been opened). It wakes once a minute and at each prayer, nothing more.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="shots" aria-labelledby="s-title">
+        <h2 id="s-title">One small window, opened once.</h2>
+        <div class="gallery">
+          <figure>
+            <img src="/shots/settings-dark.png" width="465" height="780" loading="lazy" alt="Waqt settings in dark mode: city search set to Tunis, calculation method Muslim World League, Standard Asr, Hijri adjustment 0." />
+            <figcaption>Pick a place and a method</figcaption>
+          </figure>
+          <figure>
+            <img src="/shots/settings-times.png" width="465" height="780" loading="lazy" alt="Waqt settings showing today's prayer times with Asr next, and adhan alerts for each prayer with a volume slider." />
+            <figcaption>See the times change as you choose</figcaption>
+          </figure>
+          <figure>
+            <img src="/shots/menu-ramadan.png" width="299" height="244" loading="lazy" alt="Waqt's tray menu during Ramadan: Iftar marked next at 18:04, dated 13 Ramadan 1448." />
+            <figcaption>Iftar countdown in Ramadan</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section id="privacy" class="privacy" aria-labelledby="p-title">
+        <h2 id="p-title">Private by design</h2>
+        <ul>
+          <li><strong>No network.</strong> Prayer times are computed on your PC and Waqt opens no connections. Its settings window runs on Windows' WebView2 with web networking off; while that window is open, the WebView2 runtime itself may still connect to Microsoft.</li>
+          <li><strong>No account.</strong> There is nothing to sign up for.</li>
+          <li><strong>No tracking.</strong> No analytics, no ads, no data leaves your machine.</li>
+        </ul>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <p>Waqt's source is on <a href="https://github.com/seifsg/waqt">GitHub</a>. Place data © <a href="https://www.geonames.org/">GeoNames</a> (CC BY 4.0). Adhan recording: CC0, Wikimedia Commons. <a href="https://github.com/seifsg/waqt/blob/main/CREDITS.md">Credits</a></p>
+      <p>🏭 Built with <a href="https://softwarefactory.company/">AI Software Factory</a> by Seif</p>
+    </footer>
+  </body>
+</html>

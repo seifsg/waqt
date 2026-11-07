@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark light" />
+    <title>Waqt settings</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script type="module" src="./main.ts"></script>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="brand">
+        <svg class="logo" viewBox="0 0 64 64" aria-hidden="true">
+          <defs>
+            <mask id="crescent"><rect width="64" height="64" fill="#fff" /><circle cx="36.9" cy="28.2" r="11.6" fill="#000" /></mask>
+          </defs>
+          <circle cx="32" cy="32" r="20.6" class="logo-track" />
+          <path d="M32 11.4A20.6 20.6 0 1 1 11.4 32" class="logo-ring" />
+          <circle cx="32" cy="32" r="13.1" class="logo-moon" mask="url(#crescent)" />
+        </svg>
+        <div>
+          <h1>Waqt</h1>
+          <p>Set it once. Waqt counts down to every prayer from your tray, offline.</p>
+        </div>
+      </header>
+
+      <form id="form" novalidate>
+        <section class="card" aria-labelledby="h-place">
+          <h2 id="h-place">Place</h2>
+          <div class="combo">
+            <label for="city">City</label>
+            <input id="city" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false"
+              aria-controls="city-list" aria-describedby="field-error" autocomplete="off" spellcheck="false" placeholder="Search 170,000 places, e.g. Tunis" />
+            <ul id="city-list" role="listbox" aria-label="Matching places" hidden></ul>
+          </div>
+          <div class="pair">
+            <label>Latitude <input id="lat" aria-describedby="field-error" type="number" step="any" min="-90" max="90" inputmode="decimal" placeholder="36.8065" /></label>
+            <label>Longitude <input id="lon" aria-describedby="field-error" type="number" step="any" min="-180" max="180" inputmode="decimal" placeholder="10.1815" /></label>
+          </div>
+          <p id="field-error" class="field-error" role="alert" hidden></p>
+          <p class="credit">Places © GeoNames (geonames.org), CC BY 4.0</p>
+          <p id="polar" class="note" hidden>Far north or south the sun may not set or rise. Times use latitude 65°, the nearest latitude where they exist.</p>
+        </section>
+
+        <section class="card" aria-labelledby="h-calc">
+          <h2 id="h-calc">Calculation</h2>
+          <label class="field">Method <select id="method"></select></label>
+          <fieldset class="seg">
+            <legend>Asr time</legend>
+            <label><input type="radio" name="madhab" value="Shafi" checked /><span>Standard <small>Shafi'i, Maliki, Hanbali</small></span></label>
+            <label><input type="radio" name="madhab" value="Hanafi" /><span>Hanafi <small>later Asr</small></span></label>
+          </fieldset>
+          <fieldset class="seg hijri">
+            <legend>Hijri date adjustment <small>for local moon sighting</small></legend>
+            <label><input type="radio" name="hijri" value="-2" /><span>−2</span></label>
+            <label><input type="radio" name="hijri" value="-1" /><span>−1</span></label>
+            <label><input type="radio" name="hijri" value="0" checked /><span>0</span></label>
+            <label><input type="radio" name="hijri" value="1" /><span>+1</span></label>
+            <label><input type="radio" name="hijri" value="2" /><span>+2</span></label>
+          </fieldset>
+        </section>
+
+        <section class="card preview" aria-labelledby="h-times">
+          <div class="preview-head">
+            <h2 id="h-times">Prayer times</h2>
+            <p id="hijri" class="muted"></p>
+          </div>
+          <ol id="times"></ol>
+        </section>
+
+        <section class="card" aria-labelledby="h-alerts">
+          <h2 id="h-alerts">Alerts</h2>
+          <p class="muted">A notification shows at every prayer time. Play the adhan for:</p>
+          <fieldset class="chips">
+            <legend class="sr-only">Adhan per prayer</legend>
+            <label><input type="checkbox" name="adhan" checked /><span>Fajr</span></label>
+            <label><input type="checkbox" name="adhan" checked /><span>Dhuhr</span></label>
+            <label><input type="checkbox" name="adhan" checked /><span>Asr</span></label>
+            <label><input type="checkbox" name="adhan" checked /><span>Maghrib</span></label>
+            <label><input type="checkbox" name="adhan" checked /><span>Isha</span></label>
+          </fieldset>
+          <div class="volume">
+            <label for="volume">Volume</label>
+            <input id="volume" type="range" min="0" max="100" step="5" value="80" />
+            <div class="listen">
+              <button id="test" type="button" class="ghost" aria-label="Test the adhan at this volume">▶ Test</button>
+              <button id="stop" type="button" class="ghost" aria-label="Stop the adhan">■ Stop</button>
+            </div>
+          </div>
+          <label class="switch"><input id="autostart" type="checkbox" role="switch" checked /><span>Start with Windows</span></label>
+        </section>
+
+        <footer class="actions">
+          <p id="error" class="error" role="alert" hidden></p>
+          <button id="save" type="submit" class="primary">Save</button>
+        </footer>
+      </form>
+    </main>
+  </body>
+</html>
