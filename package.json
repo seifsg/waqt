@@ -1,0 +1,25 @@
+{
+  "name": "waqt",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Offline prayer time countdown in your Windows tray.",
+  "scripts": {
+    "dev": "vite site",
+    "build": "vite build site",
+    "dev:ui": "vite ui",
+    "build:ui": "vite build ui",
+    "tauri": "tauri",
+    "typecheck": "tsc --noEmit",
+    "test": "cargo test --manifest-path src-tauri/Cargo.toml",
+    "cities": "node scripts/cities.ts"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.12.4",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.6"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.12.4"
+  }
+}
