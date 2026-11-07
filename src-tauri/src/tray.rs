@@ -12,6 +12,7 @@ use crate::{
     config::Config,
     hijri,
     icon::{self, Look},
+    log,
     times,
 };
 
@@ -83,7 +84,7 @@ pub fn show(app: &AppHandle, cfg: Option<&Config>, now: DateTime<Utc>) -> tauri:
 /// Enables "Stop adhan" while the adhan plays.
 pub fn set_playing(app: &AppHandle, playing: bool) {
     if let Err(e) = app.state::<Tray>().stop.set_enabled(playing) {
-        eprintln!("waqt: tray menu update failed: {e}");
+        log::error(&format!("tray menu update failed: {e}"));
     }
 }
 

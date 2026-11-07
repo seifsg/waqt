@@ -11,7 +11,7 @@ use rodio::{DeviceSinkBuilder, Player};
 use tauri::{AppHandle, Manager};
 use tauri_plugin_notification::NotificationExt;
 
-use crate::{config::Config, times::Slot, tray};
+use crate::{config::Config, log, times::Slot, tray};
 
 /// "Beautiful adhan", CC0, Wikimedia Commons (see CREDITS.md).
 const ADHAN: &[u8] = include_bytes!("../assets/adhan.ogg");
@@ -30,7 +30,7 @@ pub fn notify(app: &AppHandle, title: &str, body: &str, chime: bool) {
     let toast = app.notification().builder().title(title).body(body);
     let toast = if chime { toast.sound("Default") } else { toast };
     if let Err(e) = toast.show() {
-        eprintln!("waqt: toast failed: {e}"); // nothing left to tell the user through
+        log::error(&format!("toast failed: {e}"));
     }
 }
 
@@ -92,7 +92,7 @@ fn sync_row(app: &AppHandle) {
         tray::set_playing(&main, playing);
     };
     if let Err(e) = app.run_on_main_thread(sync) {
-        eprintln!("waqt: tray menu update failed: {e}");
+        log::error(&format!("tray menu update failed: {e}"));
     }
 }
 

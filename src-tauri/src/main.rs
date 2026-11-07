@@ -5,6 +5,7 @@ mod clock;
 mod config;
 mod hijri;
 mod icon;
+mod log;
 mod settings;
 mod ticker;
 mod times;
@@ -46,7 +47,7 @@ fn on_menu(app: &AppHandle, id: &str) {
             None => settings::open_or_report(app),
             cfg => {
                 if let Err(e) = tray::show(app, cfg.as_ref(), clock::now()) {
-                    eprintln!("waqt: tray update failed: {e}");
+                    log::error(&format!("tray update failed: {e}"));
                 }
             }
         },
@@ -79,6 +80,7 @@ fn main() {
         ])
         .manage(alert::Adhan::default())
         .setup(|app| {
+            log::init(app.handle());
             app.manage(tray::build(app.handle(), on_menu)?);
             let cfg = load_config(app.handle());
             let first_run = cfg.is_none();

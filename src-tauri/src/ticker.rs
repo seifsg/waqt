@@ -6,7 +6,7 @@ use std::{thread, time::Duration as StdDuration};
 use chrono::{DateTime, Utc};
 use tauri::{AppHandle, Manager};
 
-use crate::{Shared, alert, clock, times, tray};
+use crate::{Shared, alert, clock, log, times, tray};
 
 /// Starts the background loop for the app's lifetime.
 pub fn spawn(app: AppHandle) {
@@ -24,7 +24,7 @@ pub fn spawn(app: AppHandle) {
                 }
             }
             let next = tray::show(&app, cfg.as_ref(), now).unwrap_or_else(|e| {
-                eprintln!("waqt: tray update failed: {e}");
+                log::error(&format!("tray update failed: {e}"));
                 None
             });
             prev = cfg.map(|_| now);
