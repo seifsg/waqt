@@ -101,7 +101,7 @@ select {
 select option { color: #0b1626; }
 input[type="number"] { appearance: textfield; }
 input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button { appearance: none; margin: 0; }
-input[aria-invalid] { border-color: var(--danger); }
+input[aria-invalid="true"] { border-color: var(--danger); }
 input:focus-visible, select:focus-visible, button:focus-visible, .seg input:focus-visible + span, .chips input:focus-visible + span {
   border-color: var(--teal);
   box-shadow: 0 0 0 3px rgb(43 179 163 / 0.3);

@@ -44,7 +44,10 @@ const showError = (msg: string): void => {
   error.textContent = msg;
   error.hidden = !msg;
   const bad = new Set(FIELDS.filter(([prefix]) => msg.startsWith(prefix)).flatMap(([, els]) => els));
-  for (const el of [city, lat, lon]) el.toggleAttribute("aria-invalid", bad.has(el));
+  for (const el of [city, lat, lon]) {
+    if (bad.has(el)) el.setAttribute("aria-invalid", "true"); // an empty value reads as "false"
+    else el.removeAttribute("aria-invalid");
+  }
 };
 
 /** The form as a Config; a typed-in position is named by its coordinates. */
