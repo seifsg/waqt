@@ -2,7 +2,7 @@
 
 Prayer time countdown in your Windows tray. Works offline.
 
-Waqt sits in the notification area and shows the minutes left to the next prayer, notifies you at each prayer with an optional adhan, and turns the Maghrib countdown into an iftar countdown during Ramadan. After you set your city once it uses no network at all.
+Waqt sits in the notification area and shows the minutes left to the next prayer, notifies you at each prayer with an optional adhan, and turns the Maghrib countdown into an iftar countdown during Ramadan. After you set your city once, Waqt itself uses no network.
 
 ![Waqt's tray menu: today's prayer times, the next one marked, and the Hijri date](site/public/shots/menu.png)
 
