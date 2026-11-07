@@ -40,13 +40,16 @@ fn on_menu(app: &AppHandle, id: &str) {
         }
         "settings" => settings::open_or_report(app),
         "quit" => app.exit(0),
-        // Info rows are enabled for contrast; a click toggles a check mark, so redraw at once.
-        _ => {
-            let cfg = app.state::<Shared>().config();
-            if let Err(e) = tray::show(app, cfg.as_ref(), clock::now()) {
-                eprintln!("waqt: tray update failed: {e}");
+        // Info rows are enabled for contrast. Not set up: every row leads to Settings. Else a
+        // click toggled a check mark, so redraw at once.
+        _ => match app.state::<Shared>().config() {
+            None => settings::open_or_report(app),
+            cfg => {
+                if let Err(e) = tray::show(app, cfg.as_ref(), clock::now()) {
+                    eprintln!("waqt: tray update failed: {e}");
+                }
             }
-        }
+        },
     }
 }
 
