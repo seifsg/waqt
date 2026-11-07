@@ -42,4 +42,5 @@ function tick(): void {
 }
 
 tick();
-if (!matchMedia("(prefers-reduced-motion: reduce)").matches) setInterval(tick, 1100);
+// The demo pauses in a hidden tab: nobody watches it there, so it costs no CPU.
+if (!matchMedia("(prefers-reduced-motion: reduce)").matches) setInterval(() => document.hidden || tick(), 1100);
