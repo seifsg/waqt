@@ -19,7 +19,10 @@ const fold = (s: string): string => s.normalize("NFD").replace(/\p{M}/gu, "").to
 async function fetchRows(): Promise<Row[]> {
   const res = await fetch("/cities.tsv");
   if (!res.ok) throw new Error(`Place list failed to load (${res.status}).`);
-  return (await res.text()).split("\n").filter(Boolean).map((line) => ({ key: fold(line.slice(0, line.indexOf("\t"))), line }));
+  return (await res.text()).split("\n").filter(Boolean).map((line, i) => {
+    if (line.split("\t").length !== 5) throw new Error(`Place list line ${i + 1} is malformed.`);
+    return { key: fold(line.slice(0, line.indexOf("\t"))), line };
+  });
 }
 
 /** Loads the list once, shared by every caller; called at window open so the first search
@@ -34,7 +37,7 @@ export function preload(): Promise<Row[]> {
 
 /** A TSV line as a City. */
 function parse(line: string): City {
-  const [name = "", region = "", cc = "", lat = "", lon = ""] = line.split("\t");
+  const [name, region, cc, lat, lon] = line.split("\t") as [string, string, string, string, string]; // 5 columns, checked at load
   return { name, region, cc, lat: Number(lat), lon: Number(lon) };
 }
 

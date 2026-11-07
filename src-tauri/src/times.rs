@@ -194,6 +194,7 @@ mod tests {
     #[test]
     fn every_method_at_every_latitude_never_panics_and_stays_ordered() {
         use Method::*;
+        assert!(cfg(0.0, 0.0, Other, Madhab::Shafi).validate_math().is_err(), "0 deg angles are rejected");
         let methods = [
             MuslimWorldLeague, Egyptian, Karachi, UmmAlQura, Dubai, MoonsightingCommittee,
             NorthAmerica, Kuwait, Qatar, Singapore, Tehran, Turkey,

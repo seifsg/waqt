@@ -6,22 +6,20 @@ use std::{thread, time::Duration as StdDuration};
 use chrono::{DateTime, Utc};
 use tauri::{AppHandle, Manager};
 
-use crate::{Shared, alert, clock, config::Config, times, tray};
+use crate::{Shared, alert, clock, times, tray};
 
 /// Starts the background loop for the app's lifetime.
 pub fn spawn(app: AppHandle) {
     thread::spawn(move || {
-        // The previous wake; a prayer between it and now just began. Reset when the config
-        // changes so a new method or place never announces a prayer that did not start.
-        let mut prev: Option<(Config, DateTime<Utc>)> = None;
+        // The previous wake with a config; a prayer between it and now just began. A Settings
+        // save between wakes keeps it, so a prayer right after a save is still announced.
+        let mut prev: Option<DateTime<Utc>> = None;
         loop {
             let now = clock::now();
             let cfg = app.state::<Shared>().config();
-            if let (Some(c), Some((was, then))) = (&cfg, &prev)
-                && c == was
-            {
+            if let (Some(c), Some(then)) = (&cfg, prev) {
                 let last = times::last(c, now);
-                if last.at > *then {
+                if last.at > then {
                     alert::fire(&app, c, last, now - last.at);
                 }
             }
@@ -29,7 +27,7 @@ pub fn spawn(app: AppHandle) {
                 eprintln!("waqt: tray update failed: {e}");
                 None
             });
-            prev = cfg.map(|c| (c, now));
+            prev = cfg.map(|_| now);
             thread::sleep(until_next_wake(next, now));
         }
     });

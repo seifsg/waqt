@@ -11,6 +11,7 @@ export function bindPlace(input: HTMLInputElement, list: HTMLUListElement, onPic
   let active = -1;
   let seq = 0;
 
+  /** Redraws the option list and its ARIA state. */
   const render = (): void => {
     list.replaceChildren(
       ...items.map((c, i) => {
@@ -30,11 +31,13 @@ export function bindPlace(input: HTMLInputElement, list: HTMLUListElement, onPic
     input.setAttribute("aria-activedescendant", active >= 0 ? `place-${active}` : "");
     list.querySelector('[aria-selected="true"]')?.scrollIntoView({ block: "nearest" });
   };
+  /** Empties and hides the list. */
   const close = (): void => {
     items = [];
     active = -1;
     render();
   };
+  /** Fills the field with option `i` and reports it. */
   const pick = (i: number): void => {
     const c = items[i];
     if (!c) return;

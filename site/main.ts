@@ -3,6 +3,7 @@ import "@fontsource-variable/inter";
 import "./style.css";
 import { badgeFor, drawBadge } from "./badge.ts";
 
+/** The element matching `sel`; index.html must have it. */
 const $ = <T extends HTMLElement>(sel: string): T => {
   const el = document.querySelector<T>(sel);
   if (!el) throw new Error(`${sel} is missing from index.html`);
@@ -14,7 +15,9 @@ const clock = $<HTMLElement>(".clock");
 
 // Tunis, 7 Nov 2026, Muslim World League: the same day as the menu screenshot.
 const DAY: ReadonlyArray<[string, number]> = [["Fajr", 321], ["Dhuhr", 724], ["Asr", 894], ["Maghrib", 1036], ["Isha", 1120]];
+/** Minutes since midnight as "HH:MM". */
 const hhmm = (m: number): string => `${String(Math.floor(m / 60) % 24).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`;
+/** Minutes left as "45m" or "2h 05m", like the app's tooltip. */
 const left = (m: number): string => (m < 60 ? `${m}m` : `${Math.floor(m / 60)}h ${String(m % 60).padStart(2, "0")}m`);
 let now = 894 - 18; // 18 minutes before Asr
 

@@ -197,6 +197,7 @@ input[type="range"] { width: 100%; accent-color: var(--teal); }
 }
 .error { flex: 1; margin: 0; color: var(--danger); font-weight: 500; }
 .field-error { margin: 10px 0 0; color: var(--danger); font-weight: 500; }
+.credit { margin: 10px 0 0; font-size: 12px; color: var(--muted); }
 button.primary {
   min-width: 120px; padding: 10px 18px;
   font: 600 14px var(--font);

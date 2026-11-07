@@ -33,7 +33,9 @@ export function drawBadge(canvas: HTMLCanvasElement, text: string, look: Look): 
   const k = 2; // glyph scale at 16 px, as in the app
   const x0 = (16 - (text.length * 4 * k - k)) / 2;
   [...text].forEach((ch, g) => {
-    (FONT[ch] ?? []).forEach((bits, row) => {
+    const glyph = FONT[ch];
+    if (!glyph) throw new Error(`badge has no glyph for "${ch}"`);
+    glyph.forEach((bits, row) => {
       for (let col = 0; col < 3; col++) {
         if ((bits >> (2 - col)) & 1) ctx.fillRect((x0 + (g * 4 + col) * k) * unit, (3 + row * k) * unit, k * unit, k * unit);
       }

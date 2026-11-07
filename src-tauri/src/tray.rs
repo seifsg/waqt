@@ -58,7 +58,8 @@ pub fn build(app: &AppHandle, on_menu: fn(&AppHandle, &str)) -> tauri::Result<Tr
 pub fn show(app: &AppHandle, cfg: Option<&Config>, now: DateTime<Utc>) -> tauri::Result<Option<DateTime<Utc>>> {
     let t = app.state::<Tray>();
     let Some(cfg) = cfg else {
-        t.header.set_text("Set your location in Settings")?;
+        t.header.set_text("Waqt is not set up yet")?;
+        t.hijri.set_text("Open Settings… to choose your place")?;
         t.icon.set_tooltip(Some("Waqt · set your location"))?;
         return Ok(None);
     };
@@ -74,7 +75,8 @@ pub fn show(app: &AppHandle, cfg: Option<&Config>, now: DateTime<Utc>) -> tauri:
         item.set_text(format!("{}\t{}", slot.label(), clock(slot.at)))?;
         item.set_checked(slot == next)?;
     }
-    t.hijri.set_text(format!("{} · {}", hijri::label(date, cfg.hijri_offset), cfg.place))?;
+    // Win32 menus read '&' as a mnemonic; '&&' shows one.
+    t.hijri.set_text(format!("{} · {}", hijri::label(date, cfg.hijri_offset), cfg.place.replace('&', "&&")))?;
     Ok(Some(next.at))
 }
 

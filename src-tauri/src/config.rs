@@ -32,6 +32,7 @@ impl Config {
         check(self.lat.is_finite() && self.lat.abs() <= 90.0, "Latitude must be a number from -90 to 90.")?;
         check(self.lon.is_finite() && self.lon.abs() <= 180.0, "Longitude must be a number from -180 to 180.")?;
         check((-2..=2).contains(&self.hijri_offset), "Hijri adjustment must be from -2 to +2 days.")?;
+        check(self.method != Method::Other, "Pick a calculation method.")?;
         check(self.volume <= 100, "Volume must be from 0 to 100.")
     }
 
