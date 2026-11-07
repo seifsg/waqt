@@ -3,7 +3,6 @@ name = "waqt"
 version = "0.1.0"
 description = "Offline prayer time countdown in your tray"
 edition = "2024"
-license-file = "../CREDITS.md"
 publish = false
 
 [build-dependencies]
