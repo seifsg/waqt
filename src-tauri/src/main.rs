@@ -1,5 +1,9 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+mod config;
+mod hijri;
+mod times;
+
 use tauri::{RunEvent, image::Image, menu::{Menu, MenuItem}, tray::TrayIconBuilder};
 
 fn main() {
