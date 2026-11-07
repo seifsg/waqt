@@ -40,6 +40,11 @@ jobs:
       - run: npm ci
       - name: Lockfile is current
         run: cargo fetch --locked --manifest-path src-tauri/Cargo.toml
+      - name: License notices are current
+        shell: bash
+        run: |
+          npm run notices
+          git diff --exit-code -- THIRD-PARTY-NOTICES.txt || { echo "::error::THIRD-PARTY-NOTICES.txt is stale: run npm run notices and commit it"; exit 1; }
       - run: npm run typecheck
       - run: npm test
       - run: npx tauri build
