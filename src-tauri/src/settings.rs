@@ -9,6 +9,12 @@ use crate::{Shared, alert, clock, config::{self, Config}, hijri, times, tray};
 
 const LABEL: &str = "settings";
 
+/// WebView2 flags that keep the settings window offline: Tauri's defaults, no background
+/// services or QUIC, and a proxy that goes nowhere (local app and IPC hosts bypass it).
+const OFFLINE: &str = "--disable-features=msWebOOUI,msPdfOOUI,msSmartScreenProtection \
+    --disable-background-networking --disable-component-update --disable-domain-reliability \
+    --disable-sync --no-pings --disable-quic --proxy-server=127.0.0.1:9";
+
 /// Opens the settings window, or focuses it when already open.
 pub fn open(app: &AppHandle) -> tauri::Result<()> {
     if let Some(w) = app.get_webview_window(LABEL) {
@@ -20,6 +26,7 @@ pub fn open(app: &AppHandle) -> tauri::Result<()> {
     let height = screen.map_or(780.0, |h| (h * 0.9).min(780.0));
     WebviewWindowBuilder::new(app, LABEL, WebviewUrl::App("index.html".into()))
         .title("Waqt settings")
+        .additional_browser_args(OFFLINE)
         .inner_size(480.0, height)
         .min_inner_size(400.0, 560.0)
         .center()
