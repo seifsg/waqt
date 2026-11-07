@@ -4,3 +4,4 @@ dist/
 ui/dist/
 src-tauri/target/
 src-tauri/gen/
+THIRD-PARTY-NOTICES.txt
