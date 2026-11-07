@@ -66,7 +66,7 @@ h1 { margin: 0; font-size: clamp(38px, 5.4vw, 64px); line-height: 1.04; letter-s
   border: 1px solid var(--line);
   box-shadow: 0 30px 80px rgb(0 0 0 / 0.35);
 }
-.menu { border-radius: 8px; box-shadow: 0 16px 40px rgb(0 0 0 / 0.4); width: 302px; }
+.menu { border-radius: 8px; box-shadow: 0 16px 40px rgb(0 0 0 / 0.4); width: 324px; }
 .tooltip {
   padding: 6px 10px; border-radius: 6px; font-size: 13px;
   background: #f3f3f3; color: #1b1b1b; border: 1px solid #d0d0d0;
@@ -120,7 +120,7 @@ section h2 { font-size: clamp(26px, 3.4vw, 38px); letter-spacing: -0.02em; line-
   .cta a { flex: 1 1 100%; justify-content: center; }
   .grid, .gallery { grid-template-columns: 1fr; }
   .demo { padding: 18px; }
-  .menu { width: 100%; max-width: 302px; }
+  .menu { width: 100%; max-width: 324px; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
